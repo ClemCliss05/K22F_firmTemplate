@@ -1,0 +1,4 @@
+{
+    "firmware.device": "REPLACE_WITH_TARGET_MCU",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/build_firmware/compile_commands.json"
+}
