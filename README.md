@@ -1,13 +1,27 @@
-# Embedded Firmware Template
+# MK22FN512VLH12 Firmware Template
 
-Embedded firmware template focused on:
+A modern firmware template for NXP microcontrollers focused on:
 
 - Modular architecture
 - Hardware abstraction
 - Host-based testing
 - Static analysis
-- Security
+- Security checks
 - CI/CD automation
+
+---
+
+## Purpose
+
+This project provides a solid foundation for developing reliable and maintainable MK22FN512VLH12 firmware.
+
+Main objectives:
+
+- Separate application logic from hardware
+- Improve testability
+- Reduce coupling
+- Support long-term scalability
+- Integrate modern development workflows
 
 ---
 
@@ -23,18 +37,23 @@ VSCode main extensions:
 
 ---
 
-## Features
+## Architecture
 
-- Layered architecture
-- Cross-compilation support
-- Unit testing with GoogleTest
-- clang-format
-- clang-tidy
-- cppcheck
-- CodeQL
-- GitHub Actions CI
-- ASAN / UBSAN support
-- J-Link flashing scripts
+Layered architecture:
+
+```text
+app
+ ↓
+services
+ ↓
+core
+ ↓
+drivers
+ ↓
+platform (MK22FN512VLH12)
+```
+
+See `ARCHITECTURE.md` for details.
 
 ---
 
@@ -42,19 +61,27 @@ VSCode main extensions:
 
 ```text
 firmware/
-├── app/        # Application entry point
-├── core/       # Hardware-independent modules
-├── services/   # Business logic
-├── drivers/    # Peripheral drivers
-└── platform/   # Target-specific code
+├── app/                  # Application entry point
+├── core/                 # Hardware-independent modules
+│   ├── logger/
+│   └── ringbuffer/
+├── services/             # Application services
+│   └── sensor/
+├── drivers/              # Peripheral drivers
+│   ├── gpio/
+│   └── uart/
+└── platform/
+    └── mk22fn512vlh12/
+        ├── startup/
+        ├── linker/
+        ├── cmsis/
+        ├── clock.cpp
+        └── interrupt.cpp
 
-tests/          # Host unit tests
-scripts/        # Build and analysis scripts
-cmake/          # Toolchain files
-.github/        # CI/CD workflows
+tests/                    # Host unit tests
+scripts/                  # Build and analysis tools
+cmake/                    # Toolchain configuration
 ```
-
-See [ARCHITECTURE.md](ARCHITECTURE.md) for details.
 
 ---
 
@@ -67,9 +94,10 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for details.
 Generated files:
 
 ```text
-.elf
-.bin
-.hex
+firmware.elf
+firmware.bin
+firmware.hex
+firmware.map
 ```
 
 ---
@@ -86,11 +114,13 @@ cmake --build build/tests
 ctest --test-dir build/tests
 ```
 
+Tests execute on the host using GoogleTest.
+
 ---
 
 ## Static Analysis
 
-### Format
+### clang-format
 
 ```bash
 ./scripts/clang-format.sh
@@ -102,25 +132,10 @@ ctest --test-dir build/tests
 ./scripts/clang-tidy.sh
 ```
 
-Scope:
-
-```text
-core
-services
-```
-
 ### cppcheck
 
 ```bash
 ./scripts/cppcheck.sh
-```
-
-Scope:
-
-```text
-core
-services
-tests
 ```
 
 ### CodeQL
@@ -129,28 +144,15 @@ tests
 ./scripts/codeql.sh
 ```
 
-Focus:
-
-```text
-Security
-Memory safety
-Unsafe patterns
-```
-
-### Run Everything
-
-```bash
-./scripts/static_analysis.sh
-```
-
 ---
 
 ## CI/CD
 
-GitHub Actions automatically runs:
+GitHub Actions automatically performs:
 
 ### Analysis
 
+- clang-format validation
 - clang-tidy
 - cppcheck
 - unit tests
@@ -159,7 +161,7 @@ GitHub Actions automatically runs:
 
 ### Firmware
 
-- cross compilation
+- ARM cross compilation
 - ELF generation
 - BIN generation
 - HEX generation
@@ -167,17 +169,18 @@ GitHub Actions automatically runs:
 ### Security
 
 - CodeQL analysis
+- SARIF reporting
 
 ---
 
-## Design Goals
+## Design Principles
 
 - Separation of concerns
 - Hardware abstraction
-- Testability
-- Maintainability
+- Testability first
+- Dependency minimization
 - Reproducible builds
-- Security by default
+- CI-driven quality control
 
 ---
 
