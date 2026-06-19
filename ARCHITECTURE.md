@@ -63,7 +63,7 @@ sensor/
 Rules:
 
 - no register access
-- no MK22FN512VLH12 dependencies
+- no MK22FN512 dependencies
 
 ---
 
@@ -115,9 +115,9 @@ Rules:
 
 ---
 
-## Platform (MK22FN512VLH12)
+## Platform (MK22FN512)
 
-MK22FN512VLH12-specific implementation.
+MK22FN512-specific implementation.
 
 Responsibilities:
 
@@ -130,7 +130,7 @@ Responsibilities:
 Structure:
 
 ```text
-platform/mk22fn512vlh12/
+platform/mk22fn512/
 ├── startup/
 ├── linker/
 ├── cmsis/
@@ -140,8 +140,8 @@ platform/mk22fn512vlh12/
 
 Contains:
 
-- startup_stm32f072xb.s
-- STM32F072RBTx_FLASH.ld
+- startup_MK22FN512.cpp
+- linkerscript.ld
 - CMSIS Core
 - K22F device headers
 
@@ -189,7 +189,7 @@ Builds:
 
 Target:
 
-- MK22FN512VLH12
+- MK22FN512
 
 ---
 
@@ -252,7 +252,7 @@ This architecture provides:
 
 - clear separation of layers
 - high testability
-- MK22FN512VLH12 isolation
+- MK22FN512 isolation
 - scalable firmware development
 - CI/CD readiness
 - security-oriented workflow

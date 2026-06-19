@@ -22,5 +22,5 @@ target_include_directories(drivers PUBLIC
 target_link_libraries(drivers PUBLIC
 
     core
-    platform_mcu_name
+    platform_mk22fn512
 )

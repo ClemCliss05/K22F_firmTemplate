@@ -3,4 +3,4 @@
 # Each MCU family should have its own directory
 # ------------------------------------------------------------------------------
 
-add_subdirectory(mcu_name)
+add_subdirectory(mk22fn512)

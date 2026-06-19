@@ -1,24 +1,43 @@
-#include "logger.hpp"
-#include "ringbuffer.hpp"
-#include "uart.hpp"
-#include "uart_logger_backend.hpp"
+#include "MK22FN512.h"
 
-static char log_buffer_memory[256];
+int main()
+{
+    // Enable clock for PORTA & PORTD
+    SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTD_MASK;
 
-static RingBuffer log_buffer(log_buffer_memory, sizeof(log_buffer_memory));
+    // Set PTA1 PTA2 and PTD5 to GPIO mode
+    PORTA->PCR[1] = PORT_PCR_MUX(0x01);
+    PORTA->PCR[2] = PORT_PCR_MUX(0x01);
+    PORTD->PCR[5] = PORT_PCR_MUX(0x01);
 
-static UartLoggerBackend uart_backend;
+    // Set PTA1 PTA2 and PTD5 as output
+    GPIOA->PDDR |= (1u << 1);
+    GPIOA->PDDR |= (1u << 2);
+    GPIOD->PDDR |= (1u << 5);
 
-static Logger logger(log_buffer, uart_backend);
+    // Set PTA1 PTA2 and PTD5 off
+    GPIOA->PSOR = (1u << 1);
+    GPIOA->PSOR = (1u << 2);
+    GPIOD->PSOR = (1u << 5);
 
-int main() {
-    uart_init();
+    while (1)
+    {
+        // Red
+        GPIOA->PCOR = (1u << 1);
+        GPIOD->PSOR = (1u << 5);
 
-    LOG_INFO("System boot\n");
+        for (volatile uint32_t i = 0; i < 5000000; i++);
 
-    while (1) {
-        LOG_DEBUG("loop\n");
+        // Green
+        GPIOA->PCOR = (1u << 2);
+        GPIOA->PSOR = (1u << 1);
 
-        logger.flush();
+        for (volatile uint32_t i = 0; i < 5000000; i++);
+
+        // Blue
+        GPIOD->PCOR = (1u << 5);
+        GPIOA->PSOR = (1u << 2);
+
+        for (volatile uint32_t i = 0; i < 5000000; i++);
     }
 }

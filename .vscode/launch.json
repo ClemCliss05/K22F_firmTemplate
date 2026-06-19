@@ -24,7 +24,7 @@
 
             "preLaunchTask": "Build Firmware",
 
-            "svdFile": "",
+            "svdFile": "${workspaceRoot}/debug/MK22F51212.xml",
 
             "showDevDebugOutput": "raw",
 

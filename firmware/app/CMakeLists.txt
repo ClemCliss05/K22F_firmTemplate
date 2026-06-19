@@ -1,10 +1,14 @@
 # ------------------------------------------------------------------------------
 # Firmware entry point
+# Flash configuration must be linked directly into the firmware executable.
+# Static libraries may discard this object because no symbol references it.
 # ------------------------------------------------------------------------------
 
 add_executable(firmware
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+
+    ${PROJECT_SOURCE_DIR}/firmware/platform/mk22fn512/startup/flash_config.cpp
 )
 
 target_include_directories(firmware PRIVATE
@@ -29,7 +33,7 @@ set_target_properties(firmware PROPERTIES
 
 target_link_libraries(firmware PRIVATE
 
-    platform_mcu_name
+    platform_mk22fn512
     drivers
     core
     services

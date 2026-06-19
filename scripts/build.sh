@@ -24,7 +24,7 @@ flash() {
     echo "-------------------------------"
 
     JLinkExe \
-    -device DEVICE_NAME \
+    -device MK22FN512XXX12 \
     -if SWD \
     -speed 4000 \
     -autoconnect 1 \
